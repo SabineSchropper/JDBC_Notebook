@@ -9,10 +9,12 @@ public class Main {
 
         boolean isWritingNotes = true;
         Scanner scan = new Scanner(System.in);
+        Scanner scanInt = new Scanner(System.in);
+        int number = 0;
 
         Connection connection = null;
         while(isWritingNotes) {
-            System.out.println("Möchten Sie eine Notiz hinzufügen? Mit x sehen Sie sich Ihr Notizbuch an.");
+            System.out.println("Möchten Sie eine Notiz hinzufügen? Mit x können Sie sich die letzten Einträge ansehen.");
             String noteFromUser = scan.nextLine();
             if (noteFromUser.equalsIgnoreCase("x")) {
                 isWritingNotes = false;
@@ -31,12 +33,13 @@ public class Main {
                 }
             }
         }
-
+        System.out.println("Wie viele Einträge möchten Sie sich ansehen? Neueste werden zuerst angezeigt.");
+        number = scanInt.nextInt();
         try {
             String url = "jdbc:mysql://localhost:3306/codingcampus?user=root";
             connection = DriverManager.getConnection(url);
             Statement statement = null;
-            String query = "select * from note";
+            String query = "SELECT * FROM `note` ORDER BY id DESC LIMIT "+number+"";
             statement = connection.createStatement();
 
             ResultSet rs = statement.executeQuery(query);
